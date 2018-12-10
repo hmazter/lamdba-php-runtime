@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# Based on: https://docs.aws.amazon.com/lambda/latest/dg/runtimes-walkthrough.html
+
+# change dir to $LAMBDA_TASK_ROOT to run the php files from same folder
+cd "$LAMBDA_TASK_ROOT"
+
+# Processing
+while true
+do
+  HEADERS="$(mktemp)"
+
+  # Get an event
+  NEXT_INVOCATION_URL="http://${AWS_LAMBDA_RUNTIME_API}/2018-06-01/runtime/invocation/next"
+  EVENT_DATA=$(curl -sS -LD "$HEADERS" -X GET "$NEXT_INVOCATION_URL")
+
+  # Get request id for the event from headers
+  REQUEST_ID=$(grep -Fi Lambda-Runtime-Aws-Request-Id "$HEADERS" | tr -d '[:space:]' | cut -d: -f2)
+
+  # Execute the handler function from the script
+  RESPONSE=$(PHP_INI_SCAN_DIR=/opt/etc/php-7.1.d/:/var/task/php-7.1.d/ /opt/bin/php -c php.ini -d extension_dir=/opt/lib/php/7.1/modules ${_HANDLER} "$EVENT_DATA")
+
+  # Send the response
+  INVOCATION_RESPONSE_URL="http://${AWS_LAMBDA_RUNTIME_API}/2018-06-01/runtime/invocation/$REQUEST_ID/response"
+  curl -Ss -X POST "$INVOCATION_RESPONSE_URL" -d "$RESPONSE" > /dev/null
+done
