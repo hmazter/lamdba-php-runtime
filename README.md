@@ -1,7 +1,7 @@
 AWS Lambda PHP Runtime
 ======================
 
-Custom PHP 7.1 runtime for AWS Lambda, packaged as a Layer.
+Custom PHP 7.2 runtime for AWS Lambda, packaged as a Layer.
 
 THis is very much a pre-alpha and mostly done to test out the runtime/layer feature.
 If you want anything production ready to tun PHP, you should probably look at [Bref](https://github.com/mnapoli/bref) 
@@ -40,7 +40,7 @@ Resources:
       Timeout: 30
       Tracing: Active
       Layers:
-        - arn:aws:lambda:eu-west-1:338711535985:layer:php71:10 # replace this with your ARN from the "make publish" output
+        - arn:aws:lambda:eu-west-1:338711535985:layer:php72:3 # replace this with your ARN from the "make publish" output
 ```
 
 **Create a file called `hello-world/index.php` with this content:**
