@@ -8,6 +8,7 @@ mkdir /tmp/layer
 cd /tmp/layer
 cp /opt/layer/bootstrap .
 cp /opt/layer/php.ini .
+chmod 755 bootstrap
 
 mkdir bin
 cp /usr/bin/php bin/
