@@ -1,10 +1,10 @@
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-php71.zip: bootstrap
+php72.zip: bootstrap build.sh php.ini
 	docker run --rm -v `pwd`:/opt/layer lambci/lambda:build-provided /opt/layer/build.sh
 
-publish: php71.zip
+publish: php72.zip
 	./publish.sh
 
 clean:
-	rm php71.zip
+	rm php72.zip
